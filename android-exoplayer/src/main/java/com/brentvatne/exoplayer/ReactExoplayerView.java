@@ -137,7 +137,7 @@ class ReactExoplayerView extends FrameLayout implements
     private final ReactExoplayerConfig config;
     private final DefaultBandwidthMeter bandwidthMeter;
     private final ExoDatabaseProvider databaseProvider;
-    private final SimpleCache downloadCache;
+    private SimpleCache downloadCache;
     CacheDataSource.Factory cacheDataSourceFactory;
     private PlayerControlView playerControlView;
     private View playPauseControlContainer;
@@ -248,7 +248,6 @@ class ReactExoplayerView extends FrameLayout implements
         themedReactContext.addLifecycleEventListener(this);
         audioBecomingNoisyReceiver = new AudioBecomingNoisyReceiver(themedReactContext);
     }
-
 
     @Override
     public void setId(int id) {
@@ -693,6 +692,8 @@ class ReactExoplayerView extends FrameLayout implements
             updateResumePosition();
             player.release();
             player.removeMetadataOutput(this);
+            downloadCache.release();
+            downloadCache = null;
             trackSelector = null;
             player = null;
         }
